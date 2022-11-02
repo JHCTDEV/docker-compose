@@ -3,7 +3,7 @@ services:
   config-service:
     container_name: config-server
     build:
-      context: ./ConfigServer
+      context: ../ConfigServer
       dockerfile: Dockerfile
     image: jhctdev/config-server:latest
     ports:
@@ -13,7 +13,7 @@ services:
   eureka-service:
     container_name: eureka-server
     build:
-      context: ./eureka_server
+      context: ../eureka_server
       dockerfile: Dockerfile
     image: jhctdev/eureka-server:latest
     ports:
@@ -25,7 +25,7 @@ services:
   api-gateway:
     container_name: api-gateway
     build:
-      context: ./api-gateway
+      context: ../api-gateway
       dockerfile: Dockerfile
     image: jhctdev/api-gateway:latest
     ports:
@@ -47,7 +47,7 @@ services:
   product-service:
     container_name: product-service
     build:
-      context: ./product
+      context: ../product
       dockerfile: Dockerfile
     depends_on:
       - mongodb-service
@@ -61,7 +61,7 @@ services:
   customer-service:
     container_name: customer-service
     build:
-      context: ./customer
+      context: ../customer
       dockerfile: Dockerfile
     depends_on:
       - mongodb-service
@@ -75,7 +75,7 @@ services:
   customerProduct-service:
     container_name: customerproduct-service
     build:
-      context: ./customerProduct
+      context: ../customerProduct
       dockerfile: Dockerfile
     depends_on:
       - mongodb-service
@@ -89,7 +89,7 @@ services:
   transaction-service:
     container_name: transaction-service
     build:
-      context: ./transaction
+      context: ../transaction
       dockerfile: Dockerfile
     depends_on:
       - mongodb-service
