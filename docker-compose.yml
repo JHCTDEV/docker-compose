@@ -1,0 +1,105 @@
+version: '3.9'
+services:
+  config-service:
+    container_name: config-server
+    build:
+      context: ./ConfigServer
+      dockerfile: Dockerfile
+    image: jhctdev/config-server:latest
+    ports:
+      - '8099:8099'
+    networks:
+      - bootcamp
+  eureka-service:
+    container_name: eureka-server
+    build:
+      context: ./eureka_server
+      dockerfile: Dockerfile
+    image: jhctdev/eureka-server:latest
+    ports:
+      - '9093:9093'
+    networks:
+      - bootcamp
+    depends_on:
+      - config-service
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: jhctdev/api-gateway:latest
+    ports:
+      - '9090:9090'
+    networks:
+      - bootcamp
+    depends_on:
+      - config-service
+      - eureka-service
+  mongodb-service:
+    image: mongo
+    ports:
+      - '27018:27017'
+    container_name: mongodb-bootcamp
+    volumes:
+      - ./db/:/data/db
+    networks:
+      - bootcamp
+  product-service:
+    container_name: product-service
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb-service
+      - config-service
+      - eureka-service
+    image: jhctdev/product-service:latest
+    ports:
+      - '8088:8088'
+    networks:
+      - bootcamp
+  customer-service:
+    container_name: customer-service
+    build:
+      context: ./customer
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb-service
+      - config-service
+      - eureka-service
+    image: jhctdev/customer-service:latest
+    ports:
+      - '8081:8081'
+    networks:
+      - bootcamp
+  customerProduct-service:
+    container_name: customerproduct-service
+    build:
+      context: ./customerProduct
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb-service
+      - config-service
+      - eureka-service
+    image: jhctdev/customerproduct-service:latest
+    ports:
+      - '8089:8089'
+    networks:
+      - bootcamp
+  transaction-service:
+    container_name: transaction-service
+    build:
+      context: ./transaction
+      dockerfile: Dockerfile
+    depends_on:
+      - mongodb-service
+      - config-service
+      - eureka-service
+    image: jhctdev/transaction-service:latest
+    ports:
+      - '8082:8082'
+    networks:
+      - bootcamp
+networks:
+  bootcamp:
+    driver: bridge
