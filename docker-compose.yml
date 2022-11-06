@@ -70,6 +70,11 @@ services:
     image: jhctdev/customer-service:latest
     ports:
       - '8081:8081'
+    environment:
+      PORT_MONGODB: 27017
+      PORT_SERVICE: 8081
+      URI_EUREKA: http://localhost:9093/eureka
+      URI_MONGODB: mongodb://localhost/customer
     networks:
       - bootcamp
   customerProduct-service:
