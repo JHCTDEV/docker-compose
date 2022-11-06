@@ -8,6 +8,8 @@ services:
     image: jhctdev/config-server:latest
     ports:
       - '8099:8099'
+    environment:
+      PORT_SERVICE: 8099
     networks:
       - bootcamp
   eureka-service:
@@ -18,6 +20,10 @@ services:
     image: jhctdev/eureka-server:latest
     ports:
       - '9093:9093'
+    environment:
+      PORT_SERVICE: 9093
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: eureka-server
     networks:
       - bootcamp
     depends_on:
@@ -30,6 +36,11 @@ services:
     image: jhctdev/api-gateway:latest
     ports:
       - '9090:9090'
+    environment:
+      PORT_SERVICE: 9090
+      URI_EUREKA: http://eureka-server:9093/eureka
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: api-gateway
     networks:
       - bootcamp
     depends_on:
@@ -56,6 +67,12 @@ services:
     image: jhctdev/product-service:latest
     ports:
       - '8088:8088'
+    environment:
+      PORT_SERVICE: 8088
+      URI_EUREKA: http://eureka-server:9093/eureka
+      URI_MONGODB: mongodb://mongodb-bootcamp/product
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: product-service
     networks:
       - bootcamp
   customer-service:
@@ -73,9 +90,10 @@ services:
     environment:
       PORT_MONGODB: 27017
       PORT_SERVICE: 8081
-      URI_EUREKA: http://localhost:9093/eureka
-      URI_MONGODB: mongodb://localhost/customer
-      URI_CONFIG_SERVER: http://root:123a@localhost:8099
+      URI_EUREKA: http://eureka-server:9093/eureka
+      URI_MONGODB: mongodb://mongodb-bootcamp/customer
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: customer-service
     networks:
       - bootcamp
   customerProduct-service:
@@ -90,6 +108,12 @@ services:
     image: jhctdev/customerproduct-service:latest
     ports:
       - '8089:8089'
+    environment:
+      PORT_SERVICE: 8089
+      URI_EUREKA: http://eureka-server:9093/eureka
+      URI_MONGODB: mongodb://mongodb-bootcamp/customerProduct
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: customerProduct-service
     networks:
       - bootcamp
   transaction-service:
@@ -104,6 +128,12 @@ services:
     image: jhctdev/transaction-service:latest
     ports:
       - '8082:8082'
+    environment:
+      PORT_SERVICE: 8082
+      URI_EUREKA: http://eureka-server:9093/eureka
+      URI_MONGODB: mongodb://mongodb-bootcamp/transaction
+      URI_CONFIG_SERVER: http://root:123a@config-server:8099
+      HOST_NAME: transaction-service
     networks:
       - bootcamp
 networks:
