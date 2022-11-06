@@ -75,6 +75,7 @@ services:
       PORT_SERVICE: 8081
       URI_EUREKA: http://localhost:9093/eureka
       URI_MONGODB: mongodb://localhost/customer
+      URI_CONFIG_SERVER: http://root:123a@localhost:8099
     networks:
       - bootcamp
   customerProduct-service:
